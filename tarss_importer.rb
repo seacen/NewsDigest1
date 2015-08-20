@@ -13,8 +13,8 @@ class TaRssImporter < RssImporter
   end
 end
 
-a = TaRssImporter.new(Date.today - 7, Date.today)
-a.scrape
-a.articles.each do |article|
-  p article
-end
+# a = TaRssImporter.new(Date.today - 7, Date.today)
+# a.scrape
+# a.articles.each do |article|
+#   p article
+# end
