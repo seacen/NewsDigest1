@@ -42,4 +42,3 @@ class DummyFormatter < News::Formatter
 	end
 
 end
-

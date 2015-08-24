@@ -11,6 +11,35 @@ class TaRssImporter < RssImporter
   def self.source_name
     'The Age World News'
   end
+
+  private
+
+  def add_to_base(item)
+    info = validate_article(item)
+
+    return unless info
+
+    @articles << News::Article.new(author: nil,
+                                   title: item.title,
+                                   summary: info[1],
+                                   images: nil,
+                                   source: item.link, date: info[0])
+  end
+
+  def validate_article(item)
+    date = item.pubDate.to_date
+
+    if @start > date || @end < date
+      return false
+    end
+    if (m = item.description.match(%r{(.)*(<p>.*<\/p>)(.*)}))
+      des = m[3]
+    else
+      des = item.description
+    end
+
+    [date, des]
+  end
 end
 
 # a = TaRssImporter.new(Date.today - 7, Date.today)
