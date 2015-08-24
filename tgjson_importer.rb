@@ -22,7 +22,7 @@ class TgJsonImporter < JsonImporter
                                  summary: nil,
                                  images: nil,
                                  source: article['webUrl'],
-                                 date: article['webPublicationDate'],
+                                 date: Date.parse(article['webPublicationDate'][0..9]),
                                  type: article['type'],
                                  sectionId: article['sectionId'],
                                  id: article['id'],
