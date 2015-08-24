@@ -5,10 +5,10 @@ class TgArticle < News::Article
 
   def initialize(author:, title:, summary:, images:, source:, date:, type:, sectionId:, id:, apiUrl:, sectionName:)
     @type = type
-    @sectionId = sectionId
+    @section_id = sectionId
     @id = id
-    @apiUrl = apiUrl
-    @sectionName = sectionName
+    @api_url = apiUrl
+    @section_name = sectionName
     @author = author
     @title = title
     @summary = summary
@@ -26,10 +26,10 @@ class TgArticle < News::Article
       "source" => @source,
       "date" => @date,
       'type' => @type,
-      'sectionId' => @sectionId,
+      'sectionId' => @section_id,
       'id' => @id,
-      'apiUrl' => @apiUrl,
-      'sectionName' => @sectionName
+      'apiUrl' => @api_url,
+      'sectionName' => @section_name
     }
   end
 end

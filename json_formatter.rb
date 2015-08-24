@@ -2,6 +2,8 @@ require_relative 'news.rb'
 require 'json'
 # JSON Formatter
 class JsonFormatter < News::Formatter
+  KEY = 0
+  VAL = 1
   def initialize
     super
   end
@@ -15,6 +17,7 @@ class JsonFormatter < News::Formatter
   end
 
   def header(article)
+    # for identifying first article in the array in later function
     @head = article.title
     "{\n\"articles\":["
   end
@@ -28,17 +31,14 @@ class JsonFormatter < News::Formatter
   end
 
   def article_representation(article)
-    filter(article)
-  end
-
-  private
-
-  def filter(article)
     arti_hash = article.attributes
     arti_hash.each do |pair|
-      arti_hash.delete(pair[0]) unless pair[1]
+      # remove nil value pair from hash
+      arti_hash.delete(pair[KEY]) unless pair[VAL]
     end
     result = JSON.pretty_generate(arti_hash)
+    # not printing comma at front that separates article json objects
+    # if the article is the first one
     if article.title == @head
       result
     else

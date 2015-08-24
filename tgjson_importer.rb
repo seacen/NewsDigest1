@@ -6,7 +6,13 @@ require 'date'
 class TgJsonImporter < JsonImporter
   def initialize(start_date, end_date)
     super
-    @url = "http://content.guardianapis.com/search?from-date=#{@start.strftime('%Y-%m-%d')}&to-date=#{@end.strftime('%Y-%m-%d')}&section=australia-news&order-by=newest&api-key=q4gr8mvu6ekamy9hfnfvu74y"
+    # source link
+    base_url = 'http://content.guardianapis.com/search?'
+    fromdate_q = "from-date=#{@start.strftime('%Y-%m-%d')}"
+    todate_q = "&to-date=#{@end.strftime('%Y-%m-%d')}"
+    sectionorder_q = '&section=australia-news&order-by=newest'
+    api_q = '&api-key=q4gr8mvu6ekamy9hfnfvu74y'
+    @url = base_url + fromdate_q + todate_q + sectionorder_q + api_q
   end
 
   def self.source_name
@@ -15,14 +21,17 @@ class TgJsonImporter < JsonImporter
 
   private
 
+  # add articles from response to the ariticle base in News::Article
   def add_to_base(response)
     response['response']['results'].each do |article|
+      # convert string to date format to store in article class
+      pub_date = Date.parse(article['webPublicationDate'][0..9])
       @articles << TgArticle.new(author: nil,
                                  title: article['webTitle'],
                                  summary: nil,
                                  images: nil,
                                  source: article['webUrl'],
-                                 date: Date.parse(article['webPublicationDate'][0..9]),
+                                 date: pub_date,
                                  type: article['type'],
                                  sectionId: article['sectionId'],
                                  id: article['id'],
@@ -31,9 +40,3 @@ class TgJsonImporter < JsonImporter
     end
   end
 end
-
-# a = TgJsonImporter.new(Date.today - 7, Date.today)
-#
-# p TgJsonImporter.source_name
-# a.scrape
-# a.articles.each { |article| p article.attributes }
